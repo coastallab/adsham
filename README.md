@@ -11,8 +11,11 @@ The entire project was advised by Sangyoung Son, PhD.
 ## Mathematical Model
 This code solves the nonlinear shallow water equations (NSWEs) and the scalar transport equation (STE).
 Governing equations are discretized using a hybrid finite volume-finite difference shceme (Kurganov and Petrova, 2007).
-An anti-diffusion function is implemented in HLL Riemann solver only for scalar concentration.
+An anti-diffusion function is implemented in HLL Riemann solver for scalar concentration.
 Diffusion terms in the STE are discretized using the finite difference method.
+
+## References
+- Kurganov, A., & Petrova, G. (2007). A second-order well-balanced positivity preserving central-upwind scheme for the Saint-Venant system. Communications in Mathematical Sciences, 5(1), 133-160.
 
 ## Code Architecture
 The source code is written by MATLAB.
