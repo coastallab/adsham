@@ -6,11 +6,6 @@ if isequal(Southtype,'wall')
     U(1:2,:,4) = U(4:-1:3,:,4);
 elseif isequal(Southtype, 'periodic')
     U(1:2,:,:) = U(ny:ny+1,:,:);
-elseif isequal(Southtype, 'open')
-    U(1:2,:,1) = [U(3,:,1); U(3,:,1)];
-    U(1:2,:,2) = 0;
-    U(1:2,:,3) = [U(3,:,3); U(3,:,3)];
-    U(1:2,:,4) = [U(3,:,4); U(3,:,4)];
 else
     if k == 1
         disp([Southtype,' boundary condition is not available yet!'])
@@ -28,11 +23,6 @@ if isequal(Westtype,'wall')
     U(:,1:2,4) = U(:,4:-1:3,4);
 elseif isequal(Westtype, 'periodic')
     U(:,1:2,:) = U(:,nx:nx+1,:);
-elseif isequal(Westtype, 'open')
-    U(:,1:2,1) = [U(:,3,1), U(:,3,1)];
-    U(:,1:2,2) = [U(:,3,2), U(:,3,2)];
-    U(:,1:2,3) = 0;
-    U(:,1:2,4) = [U(:,3,4), U(:,3,4)];
 else
     if k == 1
         disp([Westtype,' boundary condition is not available yet!'])
@@ -50,11 +40,6 @@ if isequal(Northtype,'wall')
     U(ny+3:ny+4,:,4) = U(ny+2:-1:ny+1,:,4);
 elseif isequal(Northtype, 'periodic')
     U(ny+3:ny+4,:,:) = U(4:5,:,:);
-elseif isequal(Northtype, 'open')
-    U(ny+3:ny+4,:,1) = [U(ny+2,:,1); U(ny+2,:,1)];
-    U(ny+3:ny+4,:,2) = 0;
-    U(ny+3:ny+4,:,3) = [U(ny+2,:,3); U(ny+2,:,3)];
-    U(ny+3:ny+4,:,4) = [U(ny+2,:,4); U(ny+2,:,4)];
 else
     if k == 1
         disp([Northtype,' boundary condition is not available yet!'])
@@ -72,11 +57,6 @@ if isequal(Easttype,'wall')
     U(:,nx+3:nx+4,4) = U(:,nx+2:-1:nx+1,4);
 elseif isequal(Easttype, 'periodic')
     U(:,nx+3:nx+4,:) = U(:,4:5,:);
-elseif isequal(Easttype, 'open')
-    U(:,nx+3:nx+4,1) = [U(:,nx+2,1), U(:,nx+2,1)];
-    U(:,nx+3:nx+4,2) = [U(:,nx+2,2), U(:,nx+2,2)];
-    U(:,nx+3:nx+4,3) = 0;
-    U(:,nx+3:nx+4,4) = [U(:,nx+2,4), U(:,nx+2,4)];
 else
     if k == 1
         disp([Easttype,' boundary condition is not available yet!'])

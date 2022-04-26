@@ -1,4 +1,4 @@
-function [epsilon, TWO_THETA, Corr, corrN, dt, width, length, nx, ny, dx, dy, T, nt, g, D, Inifile] = setParams(data)
+function [epsilon, TWO_THETA, Corr, corrN, dt, width, length, nx, ny, dx, dy, T, nt, g, D, Inifile, sx, sy, st] = setParams(data)
 epsilon = data(1)^4;
 TWO_THETA = data(2) * 2;
 Corr = data(3);
@@ -15,4 +15,7 @@ nt = T / dt;
 g = data(11);
 D = [data(12), data(13), data(14)];
 Inifile = data(15);
+sx = [data(16):data(17):data(18)];
+sy = [data(19):data(20):data(21)];
+st = data(22);
 end

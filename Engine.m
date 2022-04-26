@@ -1,13 +1,8 @@
-clear all; close all; clc
 %% Read setup-files
-filename = 'Convergence';
-data = readtable(strcat('Examples\',filename,'\',filename,'.txt'));
-[epsilon, TWO_THETA, Corr, corrN, dt, width, length, nx, ny, dx, dy, T, nt, g, D, Inifile] = setParams(table2array(data(:,2)));
-Bbar = importdata(strcat('Examples\',filename,'\','bathy.txt'));
-[B, BX, BY] = reconstB(Bbar,nx,ny,width,length);
-
-%% CFL check
-CFL = sqrt(-g*min(min(Bbar))) * dt / min(dx,dy)
+data = readtable(strcat('Examples/',filename,'/',filename,'.txt'));
+[epsilon, TWO_THETA, Corr, corrN, dt, Width, Length, nx, ny, dx, dy, T, nt, g, D, Inifile, sx, sy, st] = setParams(table2array(data(:,2)));
+Bbar = importdata(strcat('Examples/',filename,'/','bathy.txt'));
+[B, BX, BY] = reconstB(Bbar,nx,ny,Width,Length);
 
 %% Boundary type
 NorthBoundary = 'wall';
@@ -16,7 +11,7 @@ SouthBoundary = 'wall';
 WestBoundary = 'periodic';
 
 %% Variables
-x = 0:dx:width; y=0:dy:length; [X,Y] = meshgrid(x,y);
+x = 0:dx:Width; y=0:dy:Length; [X,Y] = meshgrid(x,y);
 U = zeros(ny+4,nx+4,4); % average value of w, hu, hv, hc
 U0 = zeros(ny+4,nx+4,4); % average value of w, hu, hv, hc
 hu = zeros(ny+3,nx+3,4); % reconstructed value of hu
@@ -31,10 +26,14 @@ dbydt = zeros(ny+4,nx+4,4,4); % cell value of temporal change of conservative va
 xflux = zeros(ny+4,nx+4,4); % reconstructed numerical flux along the x-direction
 yflux = zeros(ny+4,nx+4,4); % reconstructed numerical flux along the x-direction
 aplus = zeros(ny+2,nx+2); aminus = zeros(ny+2,nx+2); bplus = zeros(ny+2,nx+2); bminus = zeros(ny+2,nx+2);
+result = zeros(length(sy),length(sx),4,T/st);
+
+%% Initial surface water level
+U0(:,:,1) = B .* (B > 0);
 
 %% Initial conditions
 if Inifile == 1
-    load(strcat('Examples\',filename,'\','Ini.mat'));
+    load(strcat('Examples/',filename,'/','Ini.mat'));
     IniW = Ini(:,:,1); IniHU = Ini(:,:,2); IniHV = Ini(:,:,3); IniHC = Ini(:,:,4);
     U0(3:ny+2,3:nx+2,1) = IniW;
     U0(3:ny+2,3:nx+2,2) = IniHU;
@@ -45,7 +44,7 @@ end
 %% Numerical computation
 count = 0;
 U0 = BoundaryCondition(nx,ny,U0,NorthBoundary,EastBoundary,SouthBoundary,WestBoundary,0);
-for k = 1:round(T/dt)
+for k = 1:nt
     if k < 3
         timeScheme = 1; % Euler
     elseif Corr == 0
@@ -201,15 +200,11 @@ for k = 1:round(T/dt)
     U0 = U; % current state to old state
     dbydt = dbydt(:,:,:,[3,1,2]); % [t-2, t-3, t-1] -> [t-1, t-2, t-3]
     
-    % Visualization
-    if mod(k,50) == 0
-        plot(x,U(4,3:nx+2,1))
-        title(['Time = ',num2str(k*dt),' s'])
-        shading flat
-        pause(0.001)
-    end
-    if mod(k,T/dt)==0
+    if mod(k,st/dt)==0
         count = count + 1;
-        output = squeeze(U(3:ny+2,3:nx+2,:));
+        result(:,:,:,count) = squeeze(U(sy+2,sx+2,:));
     end
 end
+
+result = squeeze(result);
+run(strcat('Examples/',filename,'/Resultdisp.m'));

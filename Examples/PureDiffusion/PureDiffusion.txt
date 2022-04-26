@@ -1,0 +1,23 @@
+<Parameters>
+epsilon 	0.001
+Theta 		2
+corrector	0
+IterNum 	0
+timestep 	0.0005
+width 		4
+length 		4
+nx 			201
+ny 			201
+simulation 	15
+g			9.81
+Dxx			0.001
+Dxy			0
+Dyy			0.001
+Inifile		1
+sxmin		1
+sxdel		1
+sxmax		201
+symin		1
+sydel		1
+symax		201
+sdt			7.5
